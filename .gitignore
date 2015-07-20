@@ -30,3 +30,6 @@
 # Vim temp files
 *.swp
 *.swo
+
+# DB dump files
+*.bin
