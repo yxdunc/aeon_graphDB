@@ -1,5 +1,5 @@
 CXX = g++
-MODE=release
+MODE=debug
 CMODE = -O3
 ifeq ($(MODE), debug)
 CMODE = -g

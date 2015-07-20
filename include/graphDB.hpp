@@ -28,17 +28,23 @@ class graphDB
 		void	connect_db(sstr db_name, uint db_size);
 
 		/* add a new node type */
-//		void	add_node_type(sstr name, uint size, uint *fields_type, sstr *fields_name);
+		void	add_node_type(sstr name, uint size, std::vector<sstr> fields_name);
 
 		/* create a new node of type "type_name" */
-//		aeon::node	*create_node(sstr type_name);
+		node	*create_node(sstr type_name);
+
+		/* return a vector of the fields names */
+		std::map <uint, std::vector<sstr> >	get_type_fields;
+
+
+	private:
+		void	*db_ptr;
 
 		std::map <sstr, uint>			get_type_id;
 		std::map <sstr, uint>			get_type_size;
 		std::map <uint, sstr>			get_type_name;
-		std::map <uint, std::vector<sstr> >	get_type_fields;
-	private:
-		void	*db_ptr;
+
+		uint	number_of_types;
 };
 }
 #endif //!GRAPHDB_HPP

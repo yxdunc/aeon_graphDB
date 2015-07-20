@@ -1,5 +1,7 @@
 #include "graphDB.hpp"
 #include <string.h>
+#include <cstdlib>
+#include "node.hpp"
 
 using namespace aeon;
 
@@ -12,6 +14,7 @@ graphDB::graphDB( void )
 graphDB::graphDB( sstr db_name, uint db_size )
 {
 	this->connect_db(db_name, db_size);
+	this->number_of_types = 0;
 	return ;
 }
 
@@ -33,14 +36,45 @@ void		graphDB::connect_db(sstr db_name, uint db_size)
 	delete name;
 }
 
-/*
 
-void		graphDB::add_node_type(sstr name, uint size, uint *fields_type, sstr *fields_name)
+void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
+	this->get_type_id[name] = this->number_of_types;
+	this->get_type_size[name] = size;
+	this->get_type_name[this->number_of_types] = name;
+	this->get_type_fields[this->number_of_types] = fields_name;
 
+	this->number_of_types += 1; 
 }
-aeon::node	*create_node(sstr type_name)
+
+node		*graphDB::create_node(sstr type_name)
 {
+	node	*nnode = NULL;
+	wg_int	encoded_data;
+	void	*rec;
 
+	rec = wg_create_record(this->db_ptr, get_type_size[type_name]);
+	if(rec == NULL)
+	{
+		std::cout << "ERROR: couln't add a new record to the database." << std::endl;
+		exit(-1);
+	}
+	/* set the type field */
+        encoded_data = wg_encode_int(db_ptr, get_type_id[type_name]);
+        if(encoded_data == WG_ILLEGAL)
+        {
+                std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
+        }
+        if (wg_set_field(db_ptr, rec, 0, encoded_data) < 0)
+        {
+                std::cout << "Impossible to write in the field" << std::endl;
+        }
+	/* */
+	nnode = new node(rec);
+	for (uint i = 0; i < get_type_size[type_name]; i++)
+		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
+	nnode->agdb = this;
+	
+	/* don't forget to add type field !!!!! */
+	return ( nnode );
 }
-*/

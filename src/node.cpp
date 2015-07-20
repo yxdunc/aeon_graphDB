@@ -154,6 +154,7 @@ void    node::set_field(sstr field_name, sstr data)
 	{
 		std::cout << "Impossible to write in the field" << std::endl;
 	}
+	delete str;
 }
 
 void    node::set_field(sstr field_name, int data)
