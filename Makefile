@@ -1,4 +1,4 @@
-CXX = g++
+CXX = g++ -std=c++11
 MODE=debug
 CMODE = -O3
 ifeq ($(MODE), debug)

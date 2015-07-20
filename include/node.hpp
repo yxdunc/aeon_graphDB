@@ -32,6 +32,7 @@ class node
 	private:
 		/* store the graphdb ptr of the instance that created it	*/
 		/* (allow access to up to date type list)			*/
+		node( void ) {};
 		graphDB	*agdb;
 
 		void	*record_ptr;

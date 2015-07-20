@@ -28,6 +28,11 @@ void		graphDB::connect_db(sstr db_name, uint db_size)
 {
 	char *name = new char[db_name.size()+1];
 
+	if(this->db_ptr != NULL)
+	{
+		std::cout << "ERROR: you can't connect twice to a database" << std::endl;
+		exit(-1);
+	}
 	strcpy(name, db_name.c_str());
 
 	if (!(this->db_ptr = wg_attach_database(name, db_size)))
