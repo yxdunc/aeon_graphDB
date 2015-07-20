@@ -18,15 +18,17 @@ class node
 
 		/* getters/setters */
 		void	get_field(sstr field_name, node **ret) const; /* dynamically allocate the reutned node */
-/*		void	get_field(sstr field_name, sstr *ret) const;
+		void	get_field(sstr field_name, sstr *ret) const;
 		void	get_field(sstr field_name, int	*ret) const;
 		void	get_field(sstr field_name, double *ret) const;
+//		void	get_field(sstr field_name, node_list *ret);
 
 		void	set_field(sstr field_name, node *data);
 		void	set_field(sstr field_name, sstr data);
 		void	set_field(sstr field_name, int data);
 		void	set_field(sstr field_name, double data);
-*/
+//		void	set_field(sstr field_name, node_list ret);
+
 	private:
 		/* store the graphdb ptr of the instance that created it	*/
 		/* (allow access to up to date type list)			*/
