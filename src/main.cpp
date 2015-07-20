@@ -4,7 +4,7 @@
 
 int		main(void)
 {
-	aeon::graphDB	db("aeonDB", 1000000);
+	aeon::graphDB	db("aeonDB", 100000);
 	aeon::node	node_1();
 	return (0);
 }
