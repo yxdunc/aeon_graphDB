@@ -35,7 +35,7 @@ void    node::get_field(sstr field_name, node **ret) const/* maybe a double dere
 		return ;
 	}
 
-	rec = wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index + 1));
+	rec = wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 
 	fresh_node = new node(rec);
 	fresh_node->agdb = this->agdb;
@@ -63,7 +63,7 @@ void    node::get_field(sstr field_name, sstr *ret) const
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	*ret = wg_decode_str(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index + 1));
+	*ret = wg_decode_str(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 }
 
 void    node::get_field(sstr field_name, int *ret) const
@@ -79,7 +79,7 @@ void    node::get_field(sstr field_name, int *ret) const
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	*ret = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index + 1));
+	*ret = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 }
 
 void    node::get_field(sstr field_name, double *ret) const
@@ -95,7 +95,7 @@ void    node::get_field(sstr field_name, double *ret) const
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	*ret = wg_decode_double(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index + 1));
+	*ret = wg_decode_double(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 }
 /* end of getters */
 
@@ -120,7 +120,7 @@ void    node::set_field(sstr field_name, node *data)
 	{
 		std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
 	}
-	if (wg_set_field(agdb->db_ptr, record_ptr, index + 1, encoded_data) < 0)
+	if (wg_set_field(agdb->db_ptr, record_ptr, index, encoded_data) < 0)
 	{
 		std::cout << "Impossible to write in the field" << std::endl;
 	}
@@ -150,7 +150,7 @@ void    node::set_field(sstr field_name, sstr data)
 	{
 		std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
 	}
-	if (wg_set_field(agdb->db_ptr, record_ptr, index + 1, encoded_data) < 0)
+	if (wg_set_field(agdb->db_ptr, record_ptr, index, encoded_data) < 0)
 	{
 		std::cout << "Impossible to write in the field" << std::endl;
 	}
@@ -177,7 +177,7 @@ void    node::set_field(sstr field_name, int data)
 	{
 		std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
 	}
-	if (wg_set_field(agdb->db_ptr, record_ptr, index + 1, encoded_data) < 0)
+	if (wg_set_field(agdb->db_ptr, record_ptr, index, encoded_data) < 0)
 	{
 		std::cout << "Impossible to write in the field" << std::endl;
 	}
@@ -203,7 +203,7 @@ void    node::set_field(sstr field_name, double data)
 	{
 		std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
 	}
-	if (wg_set_field(agdb->db_ptr, record_ptr, index + 1, encoded_data) < 0)
+	if (wg_set_field(agdb->db_ptr, record_ptr, index, encoded_data) < 0)
 	{
 		std::cout << "Impossible to write in the field" << std::endl;
 	}

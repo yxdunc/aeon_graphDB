@@ -5,5 +5,6 @@ echo  "${red}WARNING: data-base have been freed !\n\
 - Data-base backup available (memorie_dump/rescue.bin)${NC}"
 wgdb export -f memorie_dump/rescue.bin
 echo  "${green}- Shared memorie allocated${NC}"
-sudo sysctl kernel.shmmax=1000000000 > /dev/null
-wgdb AI_gs free
+sudo sysctl kernel.shmmax=1000000000
+wgdb aeonDB free
+wgdb create -l

@@ -36,7 +36,10 @@ void		graphDB::connect_db(sstr db_name, uint db_size)
 	strcpy(name, db_name.c_str());
 
 	if (!(this->db_ptr = wg_attach_database(name, db_size)))
+	{
 		std::cout << "Failed to attach database" << std::endl;
+		exit(-1);
+	}
 
 	delete name;
 }
@@ -58,7 +61,7 @@ node		*graphDB::create_node(sstr type_name)
 	wg_int	encoded_data;
 	void	*rec;
 
-	rec = wg_create_record(this->db_ptr, get_type_size[type_name]);
+	rec = wg_create_record(this->db_ptr, get_type_size[type_name] + 1); // remember +1 for type field
 	if(rec == NULL)
 	{
 		std::cout << "ERROR: couln't add a new record to the database." << std::endl;
