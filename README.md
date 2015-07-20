@@ -3,10 +3,10 @@
 
 ## WhiteDB:
 
-### Download:
+#### Download:
 Download "whitedb" here : http://whitedb.org/download.html
 
-### Install:
+#### Install:
 Then to install type: (more details here: http://whitedb.org/install.html)
 ```bash
 ./configure
