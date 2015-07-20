@@ -1,6 +1,6 @@
 #include "error_handling.h"
 
-void            rgp_error(int error_id)
+void            aeon_error(int error_id)
 {
         if (error_id == 0)
         {

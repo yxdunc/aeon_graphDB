@@ -7,22 +7,17 @@ endif
 CFLAGS = -Werror -Wextra -Wall $(CMODE)
 TARGET = aeon_graphDB
 SRC_DIR = ./src
-INCLUDE_DIR =	./include	\
-		-I ./include/obsolet
+INCLUDE_DIR =	./include
 BUILD_DIR = ./builds
 
 SRC =				main.cpp			\
 					$(SRC_AEON_GDB)		\
-					$(SRC_STRING)		\
 					$(SRC_ERROR)
 
-SRC_AEON_GDB =		wdb_mutex.cpp		\
-			node.cpp		\
+SRC_AEON_GDB =		node.cpp		\
 			graphDB.cpp
 
 SRC_ERROR =		error_handling.cpp
-
-SRC_STRING =		str_isolate.cpp
 
 ifeq ($(MODE), debug)
 COLOR_ID = \033[0;32m
