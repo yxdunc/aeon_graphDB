@@ -43,6 +43,7 @@ class graphDB
 		void	*db_ptr;
 
 		void	_add_node_type(sstr name, uint size, std::vector<sstr> fields_name);
+		node	*_create_node(sstr type_name);
 
 		std::map <sstr, uint>			get_type_id;
 		std::map <sstr, uint>			get_type_size;

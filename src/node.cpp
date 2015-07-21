@@ -238,6 +238,7 @@ void	node::list_next(sstr field_name)
 	}
 	rec = list_current_elem[field_name];
 	
+	//return NULL if end of list
 	list_current_elem[field_name] = ;
 
 }*/

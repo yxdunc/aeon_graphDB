@@ -13,6 +13,7 @@ graphDB::graphDB( void )
 
 graphDB::graphDB( sstr db_name, uint db_size )
 {
+	this->db_ptr = NULL;
 	this->connect_db(db_name, db_size);
 	this->number_of_types = 1000; // that let the first 1000 type id for internal purposes
 	this->_add_node_type("_list", 2, {"next", "value"});
@@ -72,6 +73,44 @@ void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_nam
 }
 
 node		*graphDB::create_node(sstr type_name)
+{
+	node	*nnode = NULL;
+	wg_int	encoded_data;
+	void	*rec;
+
+	if(type_name[0] == '_')
+	{
+		std::cout << "/!\\ Type name begining by '_' are reserved." << std::endl;
+		exit(0);
+	}
+	rec = wg_create_record(this->db_ptr, get_type_size[type_name] + 1); // remember +1 for type field
+	if(rec == NULL)
+	{
+		std::cout << "ERROR: couln't add a new record to the database." << std::endl;
+		exit(-1);
+	}
+	/* set the type field */
+        encoded_data = wg_encode_int(db_ptr, get_type_id[type_name]);
+        if(encoded_data == WG_ILLEGAL)
+        {
+                std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
+        }
+        if (wg_set_field(db_ptr, rec, 0, encoded_data) < 0)
+        {
+                std::cout << "Impossible to write in the field" << std::endl;
+        }
+	/* */
+	nnode = new node(rec);
+	for (uint i = 0; i < get_type_size[type_name]; i++)
+		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
+	
+	nnode->agdb = this;
+	
+	/* don't forget to add type field !!!!! */
+	return ( nnode );
+}
+
+node		*graphDB::_create_node(sstr type_name)
 {
 	node	*nnode = NULL;
 	wg_int	encoded_data;

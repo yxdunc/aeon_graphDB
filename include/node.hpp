@@ -48,6 +48,7 @@ class node
 		/* lists offset maps */
 		std::map<sstr, void*>	list_current_elem;
 		std::map<sstr, void*>	list_first_elem;
+		std::map<sstr, void*>	list_last_elem;
 
 };
 }
