@@ -14,7 +14,8 @@ graphDB::graphDB( void )
 graphDB::graphDB( sstr db_name, uint db_size )
 {
 	this->connect_db(db_name, db_size);
-	this->number_of_types = 0;
+	this->number_of_types = 1000; // that let the first 1000 type id for internal purposes
+	this->_add_node_type("_list", 2, {"next", "value"});
 	return ;
 }
 
@@ -46,6 +47,21 @@ void		graphDB::connect_db(sstr db_name, uint db_size)
 
 
 void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
+{
+	if(name[0] == '_')
+	{
+		std::cout << "/!\\ Type name begining by '_' are reserved." << std::endl;
+		return ;
+	}
+	this->get_type_id[name] = this->number_of_types;
+	this->get_type_size[name] = size;
+	this->get_type_name[this->number_of_types] = name;
+	this->get_type_fields[this->number_of_types] = fields_name;
+
+	this->number_of_types += 1; 
+}
+
+void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
 	this->get_type_id[name] = this->number_of_types;
 	this->get_type_size[name] = size;

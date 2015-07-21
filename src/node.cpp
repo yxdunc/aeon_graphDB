@@ -17,13 +17,13 @@ node::~node( void )
 }
 
 /* getters */
-void    node::get_field(sstr field_name, node **ret) const/* maybe a double dereferencement */
+void    node::get_field(sstr field_name, node **ret) const
 {
 	uint			index;
 	uint			type_id;
 	void			*rec;
 	node			*fresh_node;
-	std::vector<sstr>	fields_list; /* store the names of the fields */
+	std::vector<sstr>	fields_list; // store the names of the fields
 
 	try
 	{
@@ -39,7 +39,7 @@ void    node::get_field(sstr field_name, node **ret) const/* maybe a double dere
 
 	fresh_node = new node(rec);
 	fresh_node->agdb = this->agdb;
-	type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, 0)); /* 0 is type field */
+	type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, 0)); // 0 is type field
 	fields_list = agdb->get_type_fields[type_id];
 	for (uint i = 0; i < fields_list.size(); i++)
 	{
@@ -48,7 +48,6 @@ void    node::get_field(sstr field_name, node **ret) const/* maybe a double dere
 
 	*ret = fresh_node;
 }
-
 
 void    node::get_field(sstr field_name, sstr *ret) const
 {
@@ -209,3 +208,37 @@ void    node::set_field(sstr field_name, double data)
 	}
 }
 /* end of setters */
+
+/* list managment */
+
+void	node::list_begining(sstr field_name)
+{
+	try
+	{
+		this->list_first_elem.at(field_name);
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "[ERROR] Bad list initialisation: " << e.what() << std::endl;
+		exit(-1) ;
+	}
+	list_current_elem[field_name] = list_first_elem[field_name];
+}
+/*
+void	node::list_next(sstr field_name)
+{
+	try
+	{
+		this->list_current_elem.at(field_name);
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "[ERROR] Bad list initialisation: " << e.what() << std::endl;
+		exit(-1) ;
+	}
+	rec = list_current_elem[field_name];
+	
+	list_current_elem[field_name] = ;
+
+}*/
+/* end of list */

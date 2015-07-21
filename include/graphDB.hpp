@@ -6,6 +6,8 @@
 #include <map>
 #include <vector>
 
+/* internal field type id ( [0..1000] ) */
+//# define _LIST_TYPE 0
 
 typedef std::string sstr;
 typedef unsigned int uint;
@@ -39,6 +41,8 @@ class graphDB
 
 	private:
 		void	*db_ptr;
+
+		void	_add_node_type(sstr name, uint size, std::vector<sstr> fields_name);
 
 		std::map <sstr, uint>			get_type_id;
 		std::map <sstr, uint>			get_type_size;

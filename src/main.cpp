@@ -51,6 +51,18 @@ int		main(void)
 	node->get_field("field5", &str);
 	std::cout << str << std::endl;
 
+/* to do
+	// list
+	node->add_list_elem("field6", next_node);
+	node->add_list_elem("field6", getted_node);
+	node->list_begining("field6");
+	do
+	{
+		node->get_list_elem("field6", getted_node);
+		node->list_next("field6");
+	}
+	while(getted_node != NULL)
+*/
 	delete db;
 	return 0;
 }
