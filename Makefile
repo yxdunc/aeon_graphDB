@@ -28,7 +28,7 @@ COLOR_NO = \033[0m
 OBJS = $(addprefix $(BUILD_DIR)/, $(SRC:.cpp=.o))
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC)) 
 INCLUDES = -I$(INCLUDE_DIR) 
-LIB_LINKS =  -lwgdb -lsfml-graphics -lsfml-window -lsfml-system
+LIB_LINKS =  -lwgdb
 
 
 all: $(BUILD_DIR) $(TARGET)
