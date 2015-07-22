@@ -51,20 +51,21 @@ int		main(void)
 	node->get_field("field5", &str);
 	std::cout << str << std::endl;
 
-/*
 	// list
-	std::cout << "\nList tests:\n" << std::endl;
+	std::cout << std::endl << "List tests:" << std::endl;
 	node->add_list_elem("field6", next_node);
 	node->add_list_elem("field6", getted_node);
-	std::cout << "Elements added\n" << std::endl;
+	std::cout << "-Elements added" << std::endl;
 	node->list_begining("field6");
 	do
 	{
-		std::cout << "In da loop\n" << std::endl;
+		std::cout << "-In da loop" << std::endl;
 		node->get_list_elem("field6", &getted_node);
 	}
 	while(node->list_next("field6"));
-*/
+	std::cout << "-List browsed" << std::endl;
+	
+
 	delete db;
 	return 0;
 }

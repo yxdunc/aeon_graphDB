@@ -236,15 +236,16 @@ int	node::list_next(sstr field_name)
 	{
 		std::cout << "[ERROR] Bad list initialisation: " << e.what() << std::endl;
 		exit(-1) ;
-	}	
-	list_current_elem[field_name] = wg_decode_record(agdb->db_ptr,\
+	}
+	if(wg_get_field(agdb->db_ptr, rec, AEON_LIST_NEXT))
+	{
+		list_current_elem[field_name] = wg_decode_record(agdb->db_ptr,\
 								wg_get_field(agdb->db_ptr,\
 								rec, AEON_LIST_NEXT)); 
-	if (list_current_elem[field_name] == NULL)
-		return (0);
-	else
 		return (1);
-
+	}
+	else
+		return (0);
 }
 
 void	node::get_list_elem(sstr field_name, node **ret)
@@ -265,13 +266,18 @@ void	node::add_list_elem(sstr field_name, node *data)
 {
 	void	*rec;
 	void	*prev;
+	int	cond;
 
-	if (this->list_last_elem.count(field_name))
-	{	
+	if(!list_last_elem.empty())
+		cond = list_last_elem.count(field_name);
+	else
+		cond = 0;
+
+	if (cond)
+	{
 		prev = this->list_last_elem[field_name];
 		rec = wg_create_record(agdb->db_ptr, 3);
 		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id[field_name]));
-		wg_set_field(agdb->db_ptr, rec, 1, wg_encode_record(agdb->db_ptr, NULL));
 		wg_set_field(agdb->db_ptr, prev, 1, wg_encode_record(agdb->db_ptr, rec));
 		wg_set_field(agdb->db_ptr, rec, 2, wg_encode_record(agdb->db_ptr, data->record_ptr));
 
@@ -281,7 +287,6 @@ void	node::add_list_elem(sstr field_name, node *data)
 	{
 		rec = wg_create_record(agdb->db_ptr, 3);
 		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id[field_name]));
-		wg_set_field(agdb->db_ptr, rec, 1, wg_encode_record(agdb->db_ptr, NULL));
 		wg_set_field(agdb->db_ptr, rec, 2, wg_encode_record(agdb->db_ptr, data->record_ptr));
 
 		list_first_elem[field_name] = rec;
