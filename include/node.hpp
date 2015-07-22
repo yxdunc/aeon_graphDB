@@ -12,7 +12,7 @@ class node
 	public:
 
 		/* can only be construct with a valid record */
-		node(void *record);
+		node(void *record, graphDB *aeonDB);
 
 		~node( void );
 

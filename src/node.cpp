@@ -4,9 +4,12 @@
 
 using namespace aeon;
 
-node::node( void *record ) : record_ptr(record)
+node::node( void *record, graphDB *aeonDB ) : agdb(aeonDB), record_ptr(record)
 {
-
+	int type_id;
+	type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, record, 0)); // 0 is type field
+	for (uint i = 0; i < agdb->get_type_size[ agdb->get_type_name[type_id] ]; i++)
+		this->get_field_index[(agdb->get_type_fields[type_id])[i]] = i + 1;
 	return ;
 }
 
@@ -37,8 +40,7 @@ void    node::get_field(sstr field_name, node **ret) const
 
 	rec = wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 
-	fresh_node = new node(rec);
-	fresh_node->agdb = this->agdb;
+	fresh_node = new node(rec, this->agdb);
 	type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, 0)); // 0 is type field
 	fields_list = agdb->get_type_fields[type_id];
 	for (uint i = 0; i < fields_list.size(); i++)
@@ -113,7 +115,7 @@ void    node::set_field(sstr field_name, node *data)
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	
+
 	encoded_data = wg_encode_record(agdb->db_ptr, data->record_ptr);
 	if(encoded_data == WG_ILLEGAL)
 	{
@@ -129,9 +131,9 @@ void    node::set_field(sstr field_name, sstr data)
 {
 	uint			index;
 	wg_int			encoded_data;
-        char			*str = new char[data.size() + 1];
+	char			*str = new char[data.size() + 1];
 
-        strcpy(str, data.c_str());
+	strcpy(str, data.c_str());
 
 
 	try
@@ -143,7 +145,7 @@ void    node::set_field(sstr field_name, sstr data)
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	
+
 	encoded_data = wg_encode_str(agdb->db_ptr, str, 0);
 	if(encoded_data == WG_ILLEGAL)
 	{
@@ -170,7 +172,7 @@ void    node::set_field(sstr field_name, int data)
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	
+
 	encoded_data = wg_encode_int(agdb->db_ptr, data);
 	if(encoded_data == WG_ILLEGAL)
 	{
@@ -196,7 +198,7 @@ void    node::set_field(sstr field_name, double data)
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	
+
 	encoded_data = wg_encode_double(agdb->db_ptr, data);
 	if(encoded_data == WG_ILLEGAL)
 	{
@@ -240,8 +242,8 @@ int	node::list_next(sstr field_name)
 	if(wg_get_field(agdb->db_ptr, rec, AEON_LIST_NEXT))
 	{
 		list_current_elem[field_name] = wg_decode_record(agdb->db_ptr,\
-								wg_get_field(agdb->db_ptr,\
-								rec, AEON_LIST_NEXT)); 
+				wg_get_field(agdb->db_ptr,\
+					rec, AEON_LIST_NEXT)); 
 		return (1);
 	}
 	else
@@ -252,10 +254,9 @@ void	node::get_list_elem(sstr field_name, node **ret)
 {
 	void	*rec;
 	std::vector<sstr>	fields_list;
-	
+
 	rec = list_current_elem[field_name];
-	*ret = new node(wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, AEON_LIST_VALUE)));
-	(*ret)->agdb = this->agdb;
+	*ret = new node(wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, AEON_LIST_VALUE)), agdb);
 	fields_list = agdb->get_type_fields[ agdb->get_type_id[field_name] ];
 	for (uint i = 0; i < fields_list.size(); i++)
 	{
