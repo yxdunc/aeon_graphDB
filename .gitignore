@@ -26,6 +26,7 @@
 *.exe
 *.out
 *.app
+aeon_graphDB
 
 # Vim temp files
 *.swp
