@@ -7,7 +7,10 @@
 #include <vector>
 
 /* internal field type id ( [0..1000] ) */
-//# define _LIST_TYPE 0
+
+# define AEON_TYPE_FIELD 0
+# define AEON_LIST_NEXT  1 
+# define AEON_LIST_VALUE 2
 
 typedef std::string sstr;
 typedef unsigned int uint;

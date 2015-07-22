@@ -18,6 +18,7 @@ class node
 
 		/* getters/setters */
 		void	get_field(sstr field_name, node **ret) const; // dynamically allocate the reutned node
+		/* [to do]add an overload for node *ret when you already have a alocated node #opti */
 		void	get_field(sstr field_name, sstr *ret) const;
 		void	get_field(sstr field_name, int	*ret) const;
 		void	get_field(sstr field_name, double *ret) const;
@@ -28,10 +29,12 @@ class node
 		void	set_field(sstr field_name, double data);
 
 		/* list getting/setting */
-//		void	get_list_elem(sstr field_name, node **ret); // ret allocated
-//		void	add_list_elem(sstr field_name, node *data);
+		void	get_list_elem(sstr field_name, node **ret); // ret allocated
+		/* [to do]add an overload for node *ret when you already have a alocated node #opti */
+		void	add_list_elem(sstr field_name, node *data);
+
 		/* list offset controle */
-//		void	list_next(sstr field_name);
+		int	list_next(sstr field_name);
 		void	list_begining(sstr field_name);
 
 	private:

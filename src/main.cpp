@@ -15,9 +15,9 @@ int		main(void)
 	/* creat a new type of nodes */
 
 	// list of the node fields names
-	std::vector<sstr> nodeV = {"field1", "field2", "field3", "field4", "field5"}; 
+	std::vector<sstr> nodeV = {"field1", "field2", "field3", "field4", "field5", "field6"};
 	// add the node type to db
-	db->add_node_type("nodeX", 5, nodeV);
+	db->add_node_type("nodeX", 6, nodeV); // size is useless
 	/* */
 
 	/* create nodes of type "nodeX" */
@@ -51,17 +51,19 @@ int		main(void)
 	node->get_field("field5", &str);
 	std::cout << str << std::endl;
 
-/* to do
+/*
 	// list
+	std::cout << "\nList tests:\n" << std::endl;
 	node->add_list_elem("field6", next_node);
 	node->add_list_elem("field6", getted_node);
+	std::cout << "Elements added\n" << std::endl;
 	node->list_begining("field6");
 	do
 	{
-		node->get_list_elem("field6", getted_node);
-		node->list_next("field6");
+		std::cout << "In da loop\n" << std::endl;
+		node->get_list_elem("field6", &getted_node);
 	}
-	while(getted_node != NULL)
+	while(node->list_next("field6"));
 */
 	delete db;
 	return 0;

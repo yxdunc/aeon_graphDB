@@ -16,7 +16,7 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	this->db_ptr = NULL;
 	this->connect_db(db_name, db_size);
 	this->number_of_types = 1000; // that let the first 1000 type id for internal purposes
-	this->_add_node_type("_list", 2, {"next", "value"});
+	this->_add_node_type("_list", 2, {"next", "value"}); // define AEON_LIST_NEXT 1 define AEON_LIST_VALUE 2
 	return ;
 }
 

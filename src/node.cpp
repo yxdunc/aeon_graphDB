@@ -224,22 +224,69 @@ void	node::list_begining(sstr field_name)
 	}
 	list_current_elem[field_name] = list_first_elem[field_name];
 }
-/*
-void	node::list_next(sstr field_name)
+
+int	node::list_next(sstr field_name)
 {
+	void	*rec;
 	try
 	{
-		this->list_current_elem.at(field_name);
+		rec = this->list_current_elem.at(field_name);
 	}
 	catch (std::exception& e)
 	{
 		std::cout << "[ERROR] Bad list initialisation: " << e.what() << std::endl;
 		exit(-1) ;
-	}
-	rec = list_current_elem[field_name];
-	
-	//return NULL if end of list
-	list_current_elem[field_name] = ;
+	}	
+	list_current_elem[field_name] = wg_decode_record(agdb->db_ptr,\
+								wg_get_field(agdb->db_ptr,\
+								rec, AEON_LIST_NEXT)); 
+	if (list_current_elem[field_name] == NULL)
+		return (0);
+	else
+		return (1);
 
-}*/
+}
+
+void	node::get_list_elem(sstr field_name, node **ret)
+{
+	void	*rec;
+	std::vector<sstr>	fields_list;
+	
+	rec = list_current_elem[field_name];
+	*ret = new node(wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, AEON_LIST_VALUE)));
+	(*ret)->agdb = this->agdb;
+	fields_list = agdb->get_type_fields[ agdb->get_type_id[field_name] ];
+	for (uint i = 0; i < fields_list.size(); i++)
+	{
+		(*ret)->get_field_index[fields_list[i]] = i;
+	}
+}
+void	node::add_list_elem(sstr field_name, node *data)
+{
+	void	*rec;
+	void	*prev;
+
+	if (this->list_last_elem.count(field_name))
+	{	
+		prev = this->list_last_elem[field_name];
+		rec = wg_create_record(agdb->db_ptr, 3);
+		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id[field_name]));
+		wg_set_field(agdb->db_ptr, rec, 1, wg_encode_record(agdb->db_ptr, NULL));
+		wg_set_field(agdb->db_ptr, prev, 1, wg_encode_record(agdb->db_ptr, rec));
+		wg_set_field(agdb->db_ptr, rec, 2, wg_encode_record(agdb->db_ptr, data->record_ptr));
+
+		list_last_elem[field_name] = rec;
+	}
+	else
+	{
+		rec = wg_create_record(agdb->db_ptr, 3);
+		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id[field_name]));
+		wg_set_field(agdb->db_ptr, rec, 1, wg_encode_record(agdb->db_ptr, NULL));
+		wg_set_field(agdb->db_ptr, rec, 2, wg_encode_record(agdb->db_ptr, data->record_ptr));
+
+		list_first_elem[field_name] = rec;
+		list_current_elem[field_name] = rec;
+		list_last_elem[field_name] = rec;
+	}	
+}
 /* end of list */
