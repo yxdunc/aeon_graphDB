@@ -77,6 +77,8 @@ void		graphDB::connect_db(sstr db_name)
 
 void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
+	std::map<sstr, uint>	map_fields_name;
+
 	if(name[0] == '_')
 	{
 		std::cout << "/!\\ Type name begining by '_' are reserved." << std::endl;
@@ -85,17 +87,29 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	this->get_type_id[name] = this->number_of_types;
 	this->get_type_size[name] = size;
 	this->get_type_name[this->number_of_types] = name;
+
+	for (uint i = 0; i < size; i++)
+		map_fields_name[fields_name[i]] = i + 1;
+
 	this->get_type_fields[this->number_of_types] = fields_name;
+	this->get_type_fields_map[this->number_of_types] = map_fields_name;
 
 	this->number_of_types += 1; 
 }
 
 void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
+	std::map<sstr, uint>	map_fields_name;
+
 	this->get_type_id[name] = this->number_of_types;
 	this->get_type_size[name] = size;
 	this->get_type_name[this->number_of_types] = name;
+	
+	for (uint i = 0; i < size; i++)
+		map_fields_name[fields_name[i]] = i + 1;
+
 	this->get_type_fields[this->number_of_types] = fields_name;
+	this->get_type_fields_map[this->number_of_types] = map_fields_name;
 
 	this->number_of_types += 1; 
 }
@@ -166,4 +180,18 @@ node		*graphDB::_create_node(sstr type_name)
 	
 	/* don't forget to add type field !!!!! */
 	return ( nnode );
+}
+node	*graphDB::search_node(sstr type_name, sstr field_name, sstr searched)
+{
+	void	*rec;
+	char *searched_cstr = new char[searched.size()+1];
+
+	strcpy(searched_cstr, searched.c_str());
+	wg_int fieldnr = (get_type_fields_map[get_type_id[type_name]])[field_name];
+	rec = wg_find_record_str(db_ptr, fieldnr, WG_COND_EQUAL, searched_cstr, NULL);
+	delete searched_cstr;
+	if (rec == NULL)
+		return (NULL);
+	else
+		return (new node(rec, this));
 }
