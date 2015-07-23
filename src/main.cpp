@@ -64,8 +64,16 @@ int		main(void)
 	}
 	while(node->list_next("field6"));
 	std::cout << "-List browsed" << std::endl;
-	
 
+	//  search
+	delete getted_node;
+	getted_node = db->search_node("nodeX", "field5", "bye world");
+	getted_node->get_field("field3", &dbl);
+	std::cout << dbl << std::endl;
+	
+	
+	
+	delete getted_node;
 	delete db;
 	return 0;
 }
