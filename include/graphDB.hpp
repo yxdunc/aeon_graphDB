@@ -29,9 +29,6 @@ class graphDB
 		graphDB(sstr db_name);
 		~graphDB( void );
 
-		/* connect to the db and store ptr in the class instance */
-		void	create_db(sstr db_name, uint db_size);
-		void	connect_db(sstr db_name);
 
 		/* add a new node type */
 		void	add_node_type(sstr name, uint size, std::vector<sstr> fields_name);
@@ -49,6 +46,12 @@ class graphDB
 
 	private:
 		graphDB( void );
+
+		/* connect to the db and store ptr in the class instance */
+		void	create_db(sstr db_name, uint db_size);
+		void	connect_db(sstr db_name);
+
+		node	*type_data; // used to restore type_list
 		void	*db_ptr;
 
 		void	_add_node_type(sstr name, uint size, std::vector<sstr> fields_name);

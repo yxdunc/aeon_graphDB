@@ -61,12 +61,12 @@ int		main(void)
 	{
 		std::cout << "-In da loop" << std::endl;
 		node->get_list_elem("field6", &getted_node);
+		delete getted_node;
 	}
 	while(node->list_next("field6"));
 	std::cout << "-List browsed" << std::endl;
 
 	//  search
-	delete getted_node;
 	getted_node = db->search_node("nodeX", "field5", "bye world");
 	getted_node->get_field("field3", &dbl);
 	std::cout << dbl << std::endl;

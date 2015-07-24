@@ -16,7 +16,15 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	this->db_ptr = NULL;
 	this->create_db(db_name, db_size);
 	this->number_of_types = 1000; // that let the first 1000 type id for internal purposes
-	this->_add_node_type("_list", 2, {"next", "value"}); // define AEON_LIST_NEXT 1 define AEON_LIST_VALUE 2
+	this->_add_node_type("_list_elem", 2, {"next", "value"}); // define AEON_LIST_NEXT 1/AEON_LIST_VALUE 2
+	/* data type container */
+	this->_add_node_type("_type_list", 1, {"list"});
+	this->_add_node_type("_type", 2, {"name_list", "name"});
+	this->type_data = this->_create_node("_type_list"); //creat the type data container
+	/* init */
+	// type_data = find type
+	// 
+
 	return ;
 }
 
@@ -25,7 +33,15 @@ graphDB::graphDB( sstr db_name )
 	this->db_ptr = NULL;
 	this->connect_db(db_name );
 	this->number_of_types = 1000; // that let the first 1000 type id for internal purposes
-	this->_add_node_type("_list", 2, {"next", "value"}); // define AEON_LIST_NEXT 1 define AEON_LIST_VALUE 2
+	this->_add_node_type("_list_elem", 2, {"next", "value"}); 
+	/* data type container */
+	this->_add_node_type("_type_list", 1, {"list"});
+	this->_add_node_type("_type", 2, {"concat_fields_names", "name"});
+	this->type_data = this->_create_node("_type_list"); //creat the type data container
+	/* init */
+	// type_data = find type
+	//
+
 	return ;
 }
 
@@ -55,6 +71,7 @@ void		graphDB::create_db(sstr db_name, uint db_size)
 	delete name;
 }
 
+
 void		graphDB::connect_db(sstr db_name)
 {
 	char *name = new char[db_name.size()+1];
@@ -78,7 +95,10 @@ void		graphDB::connect_db(sstr db_name)
 void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
-
+/*	node *node1;
+	node *node2;
+	node *node3;
+*/
 	if(name[0] == '_')
 	{
 		std::cout << "/!\\ Type name begining by '_' are reserved." << std::endl;
@@ -93,7 +113,19 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 
 	this->get_type_fields[this->number_of_types] = fields_name;
 	this->get_type_fields_map[this->number_of_types] = map_fields_name;
+	
 
+	/* add type to shared mem */
+	//node1 = this->create_node("_type"); //creat the type data container
+/*
+	node2 = this->create_node("_type"); //  create a new
+	node2->set_field("concat field_list", name);
+	node2->set_field("name", name);
+		for ()
+			node2->add_list_elem("name_list", );
+	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
+	}
+*/
 	this->number_of_types += 1; 
 }
 

@@ -278,7 +278,7 @@ void	node::add_list_elem(sstr field_name, node *data)
 	{
 		prev = this->list_last_elem[field_name];
 		rec = wg_create_record(agdb->db_ptr, 3);
-		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id[field_name]));
+		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id["_list_elem"]));
 		wg_set_field(agdb->db_ptr, prev, 1, wg_encode_record(agdb->db_ptr, rec));
 		wg_set_field(agdb->db_ptr, rec, 2, wg_encode_record(agdb->db_ptr, data->record_ptr));
 
@@ -287,7 +287,7 @@ void	node::add_list_elem(sstr field_name, node *data)
 	else
 	{
 		rec = wg_create_record(agdb->db_ptr, 3);
-		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id[field_name]));
+		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id["_list_elem"]));
 		wg_set_field(agdb->db_ptr, rec, 2, wg_encode_record(agdb->db_ptr, data->record_ptr));
 
 		list_first_elem[field_name] = rec;
