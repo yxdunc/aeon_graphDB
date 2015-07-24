@@ -97,10 +97,9 @@ void		graphDB::connect_db(sstr db_name)
 void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
-/*	node *node1;
+	sstr	concated;
 	node *node2;
-	node *node3;
-*/
+
 	if(name[0] == '_')
 	{
 		std::cout << "/!\\ Type name begining by '_' are reserved." << std::endl;
@@ -119,16 +118,13 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 
 	/* add type to shared mem */
 	//node1 = this->create_node("_type"); //creat the type data container
-/*
-	node2 = this->create_node("_type"); //  create a new
-	node2->set_field("concat field_list", name);
+	for (uint i = 0; i < fields_name.size(); i++)
+		concated = concated + fields_name[i];
+	node2 = this->_create_node("_type"); //  create a new
+	node2->set_field("concat_fields_name", concated);
 	node2->set_field("name", name);
-	for ()
-	{
-	node2->add_list_elem("name_list", );
 	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
-	}
-*/
+
 	this->number_of_types += 1; 
 }
 
