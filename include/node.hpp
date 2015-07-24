@@ -45,6 +45,7 @@ class node
 		graphDB	*agdb;
 
 		void	*record_ptr;
+		int	_type_id;
 
 		std::map <sstr, uint>	get_field_index; // reminder field 0 is the node type
 

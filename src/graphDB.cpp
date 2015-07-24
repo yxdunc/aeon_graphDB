@@ -19,7 +19,8 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	this->_add_node_type("_list_elem", 2, {"next", "value"}); // define AEON_LIST_NEXT 1/AEON_LIST_VALUE 2
 	/* data type container */
 	this->_add_node_type("_type_list", 1, {"list"});
-	this->_add_node_type("_type", 2, {"name_list", "name"});
+	/* */
+	this->_add_node_type("_type", 2, {"concat_fields_names", "name"});
 	this->type_data = this->_create_node("_type_list"); //creat the type data container
 	/* init */
 	// type_data = find type
@@ -36,6 +37,7 @@ graphDB::graphDB( sstr db_name )
 	this->_add_node_type("_list_elem", 2, {"next", "value"}); 
 	/* data type container */
 	this->_add_node_type("_type_list", 1, {"list"});
+	/* */
 	this->_add_node_type("_type", 2, {"concat_fields_names", "name"});
 	this->type_data = this->_create_node("_type_list"); //creat the type data container
 	/* init */
@@ -121,8 +123,9 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	node2 = this->create_node("_type"); //  create a new
 	node2->set_field("concat field_list", name);
 	node2->set_field("name", name);
-		for ()
-			node2->add_list_elem("name_list", );
+	for ()
+	{
+	node2->add_list_elem("name_list", );
 	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
 	}
 */

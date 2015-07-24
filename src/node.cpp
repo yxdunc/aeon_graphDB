@@ -6,10 +6,9 @@ using namespace aeon;
 
 node::node( void *record, graphDB *aeonDB ) : agdb(aeonDB), record_ptr(record)
 {
-	int type_id;
-	type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, record, 0)); // 0 is type field
-	for (uint i = 0; i < agdb->get_type_size[ agdb->get_type_name[type_id] ]; i++)
-		this->get_field_index[(agdb->get_type_fields[type_id])[i]] = i + 1;
+	this->_type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, record, 0)); // 0 is type field
+	for (uint i = 0; i < agdb->get_type_size[ agdb->get_type_name[_type_id] ]; i++)
+		this->get_field_index[(agdb->get_type_fields[_type_id])[i]] = i + 1;
 	return ;
 }
 
@@ -23,14 +22,14 @@ node::~node( void )
 void    node::get_field(sstr field_name, node **ret) const
 {
 	uint			index;
-	uint			type_id;
+	int			type_id;
 	void			*rec;
 	node			*fresh_node;
 	std::vector<sstr>	fields_list; // store the names of the fields
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
@@ -57,7 +56,7 @@ void    node::get_field(sstr field_name, sstr *ret) const
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
@@ -73,7 +72,7 @@ void    node::get_field(sstr field_name, int *ret) const
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
@@ -89,7 +88,7 @@ void    node::get_field(sstr field_name, double *ret) const
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
@@ -108,7 +107,7 @@ void    node::set_field(sstr field_name, node *data)
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
@@ -138,7 +137,7 @@ void    node::set_field(sstr field_name, sstr data)
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
@@ -165,7 +164,7 @@ void    node::set_field(sstr field_name, int data)
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
@@ -191,7 +190,7 @@ void    node::set_field(sstr field_name, double data)
 
 	try
 	{
-		index = this->get_field_index.at(field_name);
+		index = agdb->get_type_fields_map[_type_id].at(field_name);
 	}
 	catch (std::exception& e)
 	{
