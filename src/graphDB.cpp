@@ -120,9 +120,7 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	for (uint i = 0; i < fields_name.size(); i++)
 		concated = concated + ' ' + fields_name[i];
 	node2 = this->_create_node("_type"); //  create a new
-	std::cout << "log" << std::endl;
-	node2->set_field("concat_fields_name", concated);
-	std::cout << "log" << std::endl;
+	node2->set_field("concat_fields_names", concated);
 	node2->set_field("name", name);
 	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
 	delete node2;
