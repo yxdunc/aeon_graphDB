@@ -1,4 +1,4 @@
-# aeon_graphDB [![Build Status](https://travis-ci.org/yxdunc/aeon_graphDB.svg)](https://travis-ci.org/yxdunc/aeon_graphDB)
+# aeon_graphDB
 
 
 ## WhiteDB:
@@ -25,3 +25,6 @@ make install
 make
 ./aeon_graphDB
 ```
+
+
+This is normal since travis config file is not complete and actually do not accept c++1... :[![Build Status](https://travis-ci.org/yxdunc/aeon_graphDB.svg)](https://travis-ci.org/yxdunc/aeon_graphDB)

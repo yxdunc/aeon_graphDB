@@ -1,2 +1,4 @@
 language: cpp
-script: make
+script: 
+//DOWNLOAD whiteDB install it and set the shared memory segment
+make
