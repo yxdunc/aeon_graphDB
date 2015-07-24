@@ -117,21 +117,24 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	
 
 	/* add type to shared mem */
-	//node1 = this->create_node("_type"); //creat the type data container
 	for (uint i = 0; i < fields_name.size(); i++)
 		concated = concated + ' ' + fields_name[i];
 	node2 = this->_create_node("_type"); //  create a new
+	std::cout << "log" << std::endl;
 	node2->set_field("concat_fields_name", concated);
+	std::cout << "log" << std::endl;
 	node2->set_field("name", name);
 	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
-
+	delete node2;
 	this->number_of_types += 1; 
 }
 
 void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
-
+/*	sstr	concated;
+	node *node2;
+*/
 	this->get_type_id[name] = this->number_of_types;
 	this->get_type_size[name] = size;
 	this->get_type_name[this->number_of_types] = name;
@@ -141,9 +144,27 @@ void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_nam
 
 	this->get_type_fields[this->number_of_types] = fields_name;
 	this->get_type_fields_map[this->number_of_types] = map_fields_name;
+	/* add type to shared mem */
+	/*
+	for (uint i = 0; i < fields_name.size(); i++)
+		concated = concated + ' ' + fields_name[i];
+	node2 = this->_create_node("_type"); //  create a new
+	std::cout << "log" << std::endl;
+	node2->set_field("concat_fields_name", concated);
+	node2->set_field("name", name);
+	std::cout << "log" << std::endl;
+	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
+	delete node2;
+	*/
+	/*
+	** ok the matter is that we whant to add each type to the mem but we do
+	** that using types that should have been previously added to the mem... infinit recu !
+	*/
+
 
 	this->number_of_types += 1; 
 }
+
 
 node		*graphDB::create_node(sstr type_name)
 {
