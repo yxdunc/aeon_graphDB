@@ -68,6 +68,12 @@ int		main(void)
 
 	//  search
 	getted_node = db->search_node("nodeX", "field5", "bye world");
+	str = "";
+	dbl = 0.0;
+	if (getted_node == NULL)
+		std::cout << "log null: " << std::endl;	
+	getted_node->get_field("field1", &str);
+	std::cout << str << std::endl;
 	getted_node->get_field("field3", &dbl);
 	std::cout << dbl << std::endl;
 	

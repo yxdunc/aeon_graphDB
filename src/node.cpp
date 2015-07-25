@@ -63,6 +63,7 @@ void    node::get_field(sstr field_name, sstr *ret) const
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
+	
 	*ret = wg_decode_str(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 }
 

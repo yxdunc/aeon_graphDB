@@ -193,11 +193,11 @@ node		*graphDB::create_node(sstr type_name)
         }
 	/* */
 	nnode = new node(rec, this);
+	nnode->_type_id = get_type_id[type_name];
 	for (uint i = 0; i < get_type_size[type_name]; i++)
 		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
 	
 	
-	/* don't forget to add type field !!!!! */
 	return ( nnode );
 }
 
@@ -227,7 +227,7 @@ node		*graphDB::_create_node(sstr type_name)
 	nnode = new node(rec, this);
 //	for (uint i = 0; i < get_type_size[type_name]; i++)
 //		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
-	
+
 	/* don't forget to add type field !!!!! */
 	return ( nnode );
 }
