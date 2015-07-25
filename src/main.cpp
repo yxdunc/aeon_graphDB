@@ -26,6 +26,7 @@ int		main(void)
 	/* */
 
 	/* set and get fields data of node */
+	std::cout << "Basic DB test:" << std::endl << '{' << std::endl;
 
 	// str
 	node->set_field("field1", "hello world");
@@ -50,32 +51,32 @@ int		main(void)
 	node->set_field("field5", "bye world");
 	node->get_field("field5", &str);
 	std::cout << str << std::endl;
+	std::cout << '}' << std::endl;
 
 	// list
 	std::cout << std::endl << "List tests:" << std::endl;
 	node->add_list_elem("field6", next_node);
 	node->add_list_elem("field6", getted_node);
-	std::cout << "-Elements added" << std::endl;
+	std::cout << " -Elements added" << std::endl;
 	node->list_begining("field6");
 	do
 	{
-		std::cout << "-In da loop" << std::endl;
+		std::cout << " -In da loop" << std::endl;
 		node->get_list_elem("field6", &getted_node);
 		delete getted_node;
 	}
 	while(node->list_next("field6"));
-	std::cout << "-List browsed" << std::endl;
+	std::cout << " -List browsed" << std::endl << std::endl;
 
 	//  search
+	std::cout << "Saerch DB test:" << std::endl;
 	getted_node = db->search_node("nodeX", "field5", "bye world");
 	str = "";
 	dbl = 0.0;
-	if (getted_node == NULL)
-		std::cout << "log null: " << std::endl;	
 	getted_node->get_field("field1", &str);
-	std::cout << str << std::endl;
+	std::cout << ' ' << str << std::endl;
 	getted_node->get_field("field3", &dbl);
-	std::cout << dbl << std::endl;
+	std::cout << ' ' << dbl << std::endl;
 	
 	
 	
