@@ -21,10 +21,35 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	this->_add_node_type("_type_list", 1, {"list"});
 	/* */
 	this->_add_node_type("_type", 2, {"concat_fields_names", "name"});
-	this->type_data = this->_create_node("_type_list"); //creat the type data container
-	/* init */
-	// type_data = find type
-	// 
+	this->type_data = search_node("_type_list");
+	if (this->type_data == NULL)
+		this->type_data = this->_create_node("_type_list"); //creat the type data container
+	/* init type data from db */
+	node	*getted_node;
+	sstr	str;
+	char	*pch;
+	char	*cstr;
+
+	this->type_data->list_begining("list");
+	do
+	{
+		std::cout << " -in the init loop" << std::endl;
+		this->type_data->get_list_elem("list", &getted_node);
+		getted_node->get_field("concat_fields_names", &str);
+		/**/
+		cstr = new char[str.size()+1];
+		strcpy(cstr, str.c_str());
+		pch = strtok(cstr," ");
+		while (pch != NULL)
+		{
+			std::cout << pch << std::endl;
+			pch = strtok(NULL, " ");
+		}
+		delete cstr;
+		/**/
+		delete getted_node;
+	}                                                                                            
+	while(this->type_data->list_next("list"));
 
 	return ;
 }
@@ -114,7 +139,7 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 
 	this->get_type_fields[this->number_of_types] = fields_name;
 	this->get_type_fields_map[this->number_of_types] = map_fields_name;
-	
+
 
 	/* add type to shared mem */
 	for (uint i = 0; i < fields_name.size(); i++)
@@ -130,13 +155,13 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
-/*	sstr	concated;
-	node *node2;
-*/
+	/*	sstr	concated;
+		node *node2;
+	 */
 	this->get_type_id[name] = this->number_of_types;
 	this->get_type_size[name] = size;
 	this->get_type_name[this->number_of_types] = name;
-	
+
 	for (uint i = 0; i < size; i++)
 		map_fields_name[fields_name[i]] = i + 1;
 
@@ -144,20 +169,20 @@ void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_nam
 	this->get_type_fields_map[this->number_of_types] = map_fields_name;
 	/* add type to shared mem */
 	/*
-	for (uint i = 0; i < fields_name.size(); i++)
-		concated = concated + ' ' + fields_name[i];
-	node2 = this->_create_node("_type"); //  create a new
-	std::cout << "log" << std::endl;
-	node2->set_field("concat_fields_name", concated);
-	node2->set_field("name", name);
-	std::cout << "log" << std::endl;
-	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
-	delete node2;
-	*/
+	   for (uint i = 0; i < fields_name.size(); i++)
+	   concated = concated + ' ' + fields_name[i];
+	   node2 = this->_create_node("_type"); //  create a new
+	   std::cout << "log" << std::endl;
+	   node2->set_field("concat_fields_name", concated);
+	   node2->set_field("name", name);
+	   std::cout << "log" << std::endl;
+	   type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
+	   delete node2;
+	 */
 	/*
-	** ok the matter is that we whant to add each type to the mem but we do
-	** that using types that should have been previously added to the mem... infinit recu !
-	*/
+	 ** ok the matter is that we whant to add each type to the mem but we do
+	 ** that using types that should have been previously added to the mem... infinit recu !
+	 */
 
 
 	this->number_of_types += 1; 
@@ -182,22 +207,22 @@ node		*graphDB::create_node(sstr type_name)
 		exit(-1);
 	}
 	/* set the type field */
-        encoded_data = wg_encode_int(db_ptr, get_type_id[type_name]);
-        if(encoded_data == WG_ILLEGAL)
-        {
-                std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
-        }
-        if (wg_set_field(db_ptr, rec, 0, encoded_data) < 0)
-        {
-                std::cout << "Impossible to write in the field" << std::endl;
-        }
+	encoded_data = wg_encode_int(db_ptr, get_type_id[type_name]);
+	if(encoded_data == WG_ILLEGAL)
+	{
+		std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
+	}
+	if (wg_set_field(db_ptr, rec, 0, encoded_data) < 0)
+	{
+		std::cout << "Impossible to write in the field" << std::endl;
+	}
 	/* */
 	nnode = new node(rec, this);
 	nnode->_type_id = get_type_id[type_name];
 	for (uint i = 0; i < get_type_size[type_name]; i++)
 		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
-	
-	
+
+
 	return ( nnode );
 }
 
@@ -214,19 +239,19 @@ node		*graphDB::_create_node(sstr type_name)
 		exit(-1);
 	}
 	/* set the type field */
-        encoded_data = wg_encode_int(db_ptr, get_type_id[type_name]);
-        if(encoded_data == WG_ILLEGAL)
-        {
-                std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
-        }
-        if (wg_set_field(db_ptr, rec, 0, encoded_data) < 0)
-        {
-                std::cout << "Impossible to write in the field" << std::endl;
-        }
+	encoded_data = wg_encode_int(db_ptr, get_type_id[type_name]);
+	if(encoded_data == WG_ILLEGAL)
+	{
+		std::cout << "/!\\ Shouldn't happen /!\\" << std::endl;
+	}
+	if (wg_set_field(db_ptr, rec, 0, encoded_data) < 0)
+	{
+		std::cout << "Impossible to write in the field" << std::endl;
+	}
 	/* */
 	nnode = new node(rec, this);
-//	for (uint i = 0; i < get_type_size[type_name]; i++)
-//		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
+	//	for (uint i = 0; i < get_type_size[type_name]; i++)
+	//		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
 
 	/* don't forget to add type field !!!!! */
 	return ( nnode );
@@ -239,6 +264,20 @@ node	*graphDB::search_node(sstr type_name, sstr field_name, sstr searched)
 	strcpy(searched_cstr, searched.c_str());
 	wg_int fieldnr = (get_type_fields_map[get_type_id[type_name]])[field_name];
 	rec = wg_find_record_str(db_ptr, fieldnr, WG_COND_EQUAL, searched_cstr, NULL);
+	delete searched_cstr;
+	if (rec == NULL)
+		return (NULL);
+	else
+		return (new node(rec, this));
+}
+
+node	*graphDB::search_node(sstr type_name)
+{
+	void	*rec;
+	char *searched_cstr = new char[type_name.size()+1];
+
+	strcpy(searched_cstr, type_name.c_str());
+	rec = wg_find_record_str(db_ptr, 0, WG_COND_EQUAL, searched_cstr, NULL);
 	delete searched_cstr;
 	if (rec == NULL)
 		return (NULL);
