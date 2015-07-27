@@ -20,22 +20,36 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	/* data type container */
 	this->_add_node_type("_type_list", 1, {"list"});
 	/* */
-	this->_add_node_type("_type", 2, {"concat_fields_names", "name"});
+	this->_add_node_type("_type", 3, {"concat_fields_names", "name", "id"});
 	this->type_data = search_node("_type_list");
 	if (this->type_data == NULL)
+	{
+		std::cout << "log /!\\ : " << type_data << std::endl;
 		this->type_data = this->_create_node("_type_list"); //creat the type data container
+		std::cout << "log /!\\ : " << type_data << std::endl;
+	}
+	else
+	{
 	/* init type data from db */
 	node	*getted_node;
 	sstr	str;
+	sstr	name;
 	char	*pch;
 	char	*cstr;
+	int	i = 0;
+	int	id;
 
 	this->type_data->list_begining("list");
 	do
 	{
-		std::cout << " -in the init loop" << std::endl;
 		this->type_data->get_list_elem("list", &getted_node);
+		if (getted_node == NULL)
+			break ;
 		getted_node->get_field("concat_fields_names", &str);
+		getted_node->get_field("name", &name);
+		getted_node->get_field("id", &id);
+		get_type_id[name] = id;
+		get_type_name[id] = name;
 		/**/
 		cstr = new char[str.size()+1];
 		strcpy(cstr, str.c_str());
@@ -43,14 +57,17 @@ graphDB::graphDB( sstr db_name, uint db_size )
 		while (pch != NULL)
 		{
 			std::cout << pch << std::endl;
+			get_type_fields_map[get_type_id[name]][pch] = i + 1;
 			pch = strtok(NULL, " ");
+			i++;
 		}
+		get_type_size[name] = i;
 		delete cstr;
 		/**/
 		delete getted_node;
 	}                                                                                            
 	while(this->type_data->list_next("list"));
-
+	}
 	return ;
 }
 
@@ -88,8 +105,8 @@ void		graphDB::create_db(sstr db_name, uint db_size)
 		exit(-1);
 	}
 	strcpy(name, db_name.c_str());
-
-	if (!(this->db_ptr = wg_attach_database(name, db_size)))
+	db_ptr = wg_attach_database(name, db_size);
+	if (!db_ptr)
 	{
 		std::cout << "Failed to attach database" << std::endl;
 		exit(-1);
@@ -137,7 +154,7 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	for (uint i = 0; i < size; i++)
 		map_fields_name[fields_name[i]] = i + 1;
 
-	this->get_type_fields[this->number_of_types] = fields_name;
+//	this->get_type_fields[this->number_of_types] = fields_name;
 	this->get_type_fields_map[this->number_of_types] = map_fields_name;
 
 
@@ -147,7 +164,10 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	node2 = this->_create_node("_type"); //  create a new
 	node2->set_field("concat_fields_names", concated);
 	node2->set_field("name", name);
+	node2->set_field("id", (int)get_type_id[name]);
+	std::cout << "yo1" << std::endl;
 	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
+	std::cout << "yo1" << std::endl;
 	delete node2;
 	this->number_of_types += 1; 
 }
@@ -165,7 +185,7 @@ void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_nam
 	for (uint i = 0; i < size; i++)
 		map_fields_name[fields_name[i]] = i + 1;
 
-	this->get_type_fields[this->number_of_types] = fields_name;
+//	this->get_type_fields[this->number_of_types] = fields_name;
 	this->get_type_fields_map[this->number_of_types] = map_fields_name;
 	/* add type to shared mem */
 	/*
@@ -217,11 +237,10 @@ node		*graphDB::create_node(sstr type_name)
 		std::cout << "Impossible to write in the field" << std::endl;
 	}
 	/* */
+	std::cout << "/!\\" << std::endl;
 	nnode = new node(rec, this);
+	std::cout << "/!\\" << std::endl;
 	nnode->_type_id = get_type_id[type_name];
-	for (uint i = 0; i < get_type_size[type_name]; i++)
-		nnode->get_field_index[(get_type_fields[get_type_id[type_name]])[i]] = i + 1;
-
 
 	return ( nnode );
 }
@@ -274,11 +293,8 @@ node	*graphDB::search_node(sstr type_name, sstr field_name, sstr searched)
 node	*graphDB::search_node(sstr type_name)
 {
 	void	*rec;
-	char *searched_cstr = new char[type_name.size()+1];
 
-	strcpy(searched_cstr, type_name.c_str());
-	rec = wg_find_record_str(db_ptr, 0, WG_COND_EQUAL, searched_cstr, NULL);
-	delete searched_cstr;
+	rec = wg_find_record_int(db_ptr, 0, WG_COND_EQUAL, get_type_id[type_name], NULL);
 	if (rec == NULL)
 		return (NULL);
 	else

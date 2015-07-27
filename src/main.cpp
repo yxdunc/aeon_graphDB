@@ -15,9 +15,11 @@ int		main(void)
 	/* creat a new type of nodes */
 
 	// list of the node fields names
-	std::vector<sstr> nodeV = {"field1", "field2", "field3", "field4", "field5", "field6"};
+//	std::vector<sstr> nodeV = {"field1", "field2", "field3", "field4", "field5", "field6"};
 	// add the node type to db
-	db->add_node_type("nodeX", 6, nodeV); // size is useless
+	std::cout << "main" << std::endl;
+//	db->add_node_type("nodeX", 6, nodeV); // size is useless
+	std::cout << "main" << std::endl;
 	/* */
 
 	/* create nodes of type "nodeX" */

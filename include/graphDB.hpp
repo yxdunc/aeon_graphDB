@@ -41,7 +41,7 @@ class graphDB
 		node	*search_node(sstr type_name);
 
 		/* return a vector of the fields names */
-		std::map <uint, std::vector<sstr> >	get_type_fields;
+	//	std::map <uint, std::vector<sstr> >	get_type_fields; // do not use anymore
 		std::map <uint, std::map<sstr, uint> >	get_type_fields_map;
 
 

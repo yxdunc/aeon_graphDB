@@ -7,9 +7,9 @@ using namespace aeon;
 node::node( void *record, graphDB *aeonDB ) : agdb(aeonDB), record_ptr(record)
 {
 	this->_type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, record, 0)); // 0 is type field
-	for (uint i = 0; i < agdb->get_type_size[ agdb->get_type_name[_type_id] ]; i++)
+/*	for (uint i = 0; i < agdb->get_type_size[ agdb->get_type_name[_type_id] ]; i++)
 		this->get_field_index[(agdb->get_type_fields[_type_id])[i]] = i + 1;
-	return ;
+*/	return ;
 }
 
 node::~node( void )
@@ -22,10 +22,8 @@ node::~node( void )
 void    node::get_field(sstr field_name, node **ret) const
 {
 	uint			index;
-	int			type_id;
 	void			*rec;
 	node			*fresh_node;
-	std::vector<sstr>	fields_list; // store the names of the fields
 
 	try
 	{
@@ -40,12 +38,6 @@ void    node::get_field(sstr field_name, node **ret) const
 	rec = wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 
 	fresh_node = new node(rec, this->agdb);
-	type_id = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, 0)); // 0 is type field
-	fields_list = agdb->get_type_fields[type_id];
-	for (uint i = 0; i < fields_list.size(); i++)
-	{
-		fresh_node->get_field_index[fields_list[i]] = i;
-	}
 
 	*ret = fresh_node;
 }
@@ -63,7 +55,7 @@ void    node::get_field(sstr field_name, sstr *ret) const
 		std::cout << "Invalid field name: " << e.what() << std::endl;
 		return ;
 	}
-	
+
 	*ret = wg_decode_str(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 }
 
@@ -221,8 +213,10 @@ void	node::list_begining(sstr field_name)
 	}
 	catch (std::exception& e)
 	{
-		std::cout << "[ERROR] Bad list initialisation: " << e.what() << std::endl;
-		exit(-1) ;
+		list_first_elem[field_name] = wg_decode_record(agdb->db_ptr,\
+				wg_get_field(agdb->db_ptr, record_ptr,\
+					agdb->get_type_fields_map[_type_id][field_name]));
+		list_current_elem[field_name] = list_first_elem[field_name];
 	}
 	list_current_elem[field_name] = list_first_elem[field_name];
 }
@@ -253,15 +247,15 @@ int	node::list_next(sstr field_name)
 void	node::get_list_elem(sstr field_name, node **ret)
 {
 	void	*rec;
-	std::vector<sstr>	fields_list;
+	//std::vector<sstr>	fields_list;
 
 	rec = list_current_elem[field_name];
 	*ret = new node(wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr, rec, AEON_LIST_VALUE)), agdb);
-	fields_list = agdb->get_type_fields[ agdb->get_type_id[field_name] ];
+/*	fields_list = agdb->get_type_fields[ agdb->get_type_id["_list"] ];
 	for (uint i = 0; i < fields_list.size(); i++)
 	{
 		(*ret)->get_field_index[fields_list[i]] = i;
-	}
+	}*/
 }
 void	node::add_list_elem(sstr field_name, node *data)
 {
@@ -274,6 +268,22 @@ void	node::add_list_elem(sstr field_name, node *data)
 	else
 		cond = 0;
 
+	if (cond == 42)
+	{
+		list_first_elem[field_name] = wg_decode_record(agdb->db_ptr,\
+				wg_get_field(agdb->db_ptr, record_ptr,\
+					agdb->get_type_fields_map[_type_id][field_name]));
+
+		if(list_first_elem[field_name] != NULL)
+			cond = 1;
+		list_last_elem[field_name] = list_first_elem[field_name];
+		while(wg_get_field(agdb->db_ptr, list_last_elem[field_name], AEON_LIST_NEXT) > 0)
+		{
+			list_last_elem[field_name] = wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr,\
+										list_last_elem[field_name],\
+											 AEON_LIST_NEXT)); 
+		}
+	}
 	if (cond)
 	{
 		prev = this->list_last_elem[field_name];
@@ -289,6 +299,9 @@ void	node::add_list_elem(sstr field_name, node *data)
 		rec = wg_create_record(agdb->db_ptr, 3);
 		wg_set_field(agdb->db_ptr, rec, 0, wg_encode_int(agdb->db_ptr, agdb->get_type_id["_list_elem"]));
 		wg_set_field(agdb->db_ptr, rec, 2, wg_encode_record(agdb->db_ptr, data->record_ptr));
+
+		wg_set_field(agdb->db_ptr, record_ptr, agdb->get_type_fields_map[_type_id][field_name],\
+				wg_encode_record(agdb->db_ptr, rec));
 
 		list_first_elem[field_name] = rec;
 		list_current_elem[field_name] = rec;
