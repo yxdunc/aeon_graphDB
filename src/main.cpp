@@ -56,6 +56,7 @@ int		main(void)
 	// list
 	std::cout << std::endl << "List tests:" << std::endl;
 	node->add_list_elem("field6", next_node);
+	std::cout << " -Elements added" << std::endl;
 	node->add_list_elem("field6", getted_node);
 	std::cout << " -Elements added" << std::endl;
 	node->list_begining("field6");

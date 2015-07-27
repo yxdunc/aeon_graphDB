@@ -268,23 +268,27 @@ void	node::add_list_elem(sstr field_name, node *data)
 	else
 		cond = 0;
 
-	if (cond == 42)
+	if (cond == 0)
 	{
 		list_first_elem[field_name] = wg_decode_record(agdb->db_ptr,\
 				wg_get_field(agdb->db_ptr, record_ptr,\
 					agdb->get_type_fields_map[_type_id][field_name]));
 
-		if(list_first_elem[field_name] != NULL)
+		if(wg_get_field(agdb->db_ptr, record_ptr, agdb->get_type_fields_map[_type_id][field_name]))
 		{
 			cond = 1;
 			list_last_elem[field_name] = list_first_elem[field_name];
+			std::cout << "in " << _type_id << " | " << field_name << std::endl;
 			while(wg_get_field(agdb->db_ptr, list_last_elem[field_name], AEON_LIST_NEXT) > 0)
 			{
+				std::cout << "in da loop" << std::endl;
 				list_last_elem[field_name] = wg_decode_record(agdb->db_ptr,\
 										wg_get_field(agdb->db_ptr,\
 										list_last_elem[field_name],\
 										AEON_LIST_NEXT)); 
+				std::cout << "end" << std::endl;
 			}
+			std::cout << "out" << std::endl;
 		}
 	}
 	if (cond)
