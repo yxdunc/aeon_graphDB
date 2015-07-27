@@ -24,9 +24,7 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	this->type_data = search_node("_type_list");
 	if (this->type_data == NULL)
 	{
-		std::cout << "log /!\\ : " << type_data << std::endl;
 		this->type_data = this->_create_node("_type_list"); //creat the type data container
-		std::cout << "log /!\\ : " << type_data << std::endl;
 	}
 	else
 	{
@@ -165,9 +163,7 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	node2->set_field("concat_fields_names", concated);
 	node2->set_field("name", name);
 	node2->set_field("id", (int)get_type_id[name]);
-	std::cout << "yo1" << std::endl;
 	type_data->add_list_elem( "list", node2 ); // add a node in the unique fied
-	std::cout << "yo1" << std::endl;
 	delete node2;
 	this->number_of_types += 1; 
 }
@@ -237,9 +233,7 @@ node		*graphDB::create_node(sstr type_name)
 		std::cout << "Impossible to write in the field" << std::endl;
 	}
 	/* */
-	std::cout << "/!\\" << std::endl;
 	nnode = new node(rec, this);
-	std::cout << "/!\\" << std::endl;
 	nnode->_type_id = get_type_id[type_name];
 
 	return ( nnode );

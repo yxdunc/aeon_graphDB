@@ -15,11 +15,9 @@ int		main(void)
 	/* creat a new type of nodes */
 
 	// list of the node fields names
-//	std::vector<sstr> nodeV = {"field1", "field2", "field3", "field4", "field5", "field6"};
+	std::vector<sstr> nodeV = {"field1", "field2", "field3", "field4", "field5", "field6"};
 	// add the node type to db
-	std::cout << "main" << std::endl;
-//	db->add_node_type("nodeX", 6, nodeV); // size is useless
-	std::cout << "main" << std::endl;
+	db->add_node_type("nodeX", 6, nodeV); // size is useless
 	/* */
 
 	/* create nodes of type "nodeX" */
@@ -71,7 +69,7 @@ int		main(void)
 	std::cout << " -List browsed" << std::endl << std::endl;
 
 	//  search
-	std::cout << "Saerch DB test:" << std::endl;
+	std::cout << "Search DB test:" << std::endl;
 	getted_node = db->search_node("nodeX", "field5", "bye world");
 	str = "";
 	dbl = 0.0;
