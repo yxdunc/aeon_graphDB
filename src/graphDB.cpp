@@ -145,6 +145,11 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 		std::cout << "/!\\ Type name begining by '_' are reserved." << std::endl;
 		return ;
 	}
+	if(get_type_id.count(name))
+	{
+		std::cout << "/!\\ This node type is already defined." << std::endl;
+		return ;
+	}
 	this->get_type_id[name] = this->number_of_types;
 	this->get_type_size[name] = size;
 	this->get_type_name[this->number_of_types] = name;
@@ -174,6 +179,12 @@ void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_nam
 	/*	sstr	concated;
 		node *node2;
 	 */
+
+	if(get_type_id.count(name))
+	{
+		std::cout << "/!\\ This node type is already defined." << std::endl;
+		return ;
+	}
 	this->get_type_id[name] = this->number_of_types;
 	this->get_type_size[name] = size;
 	this->get_type_name[this->number_of_types] = name;

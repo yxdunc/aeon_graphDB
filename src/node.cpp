@@ -275,13 +275,16 @@ void	node::add_list_elem(sstr field_name, node *data)
 					agdb->get_type_fields_map[_type_id][field_name]));
 
 		if(list_first_elem[field_name] != NULL)
-			cond = 1;
-		list_last_elem[field_name] = list_first_elem[field_name];
-		while(wg_get_field(agdb->db_ptr, list_last_elem[field_name], AEON_LIST_NEXT) > 0)
 		{
-			list_last_elem[field_name] = wg_decode_record(agdb->db_ptr, wg_get_field(agdb->db_ptr,\
+			cond = 1;
+			list_last_elem[field_name] = list_first_elem[field_name];
+			while(wg_get_field(agdb->db_ptr, list_last_elem[field_name], AEON_LIST_NEXT) > 0)
+			{
+				list_last_elem[field_name] = wg_decode_record(agdb->db_ptr,\
+										wg_get_field(agdb->db_ptr,\
 										list_last_elem[field_name],\
-											 AEON_LIST_NEXT)); 
+										AEON_LIST_NEXT)); 
+			}
 		}
 	}
 	if (cond)
