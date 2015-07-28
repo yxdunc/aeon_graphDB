@@ -37,12 +37,13 @@ class node
 		int	list_next(sstr field_name);
 		void	list_begining(sstr field_name);
 
+		graphDB	*agdb;
+
 	private:
 		node( void ) {};
 
 		/* store the graphdb ptr of the instance that created it	*/
 		/* (allow access to up to date type list)			*/
-		graphDB	*agdb;
 
 		void	*record_ptr;
 		int	_type_id;
