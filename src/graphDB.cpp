@@ -52,6 +52,7 @@ graphDB::graphDB( sstr db_name, uint db_size )
 		cstr = new char[str.size()+1];
 		strcpy(cstr, str.c_str());
 		pch = strtok(cstr," ");
+		i = 0;
 		while (pch != NULL)
 		{
 			std::cout << pch << std::endl;
