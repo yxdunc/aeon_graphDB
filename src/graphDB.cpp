@@ -96,43 +96,33 @@ graphDB::~graphDB( void )
 
 void		graphDB::create_db(sstr const& db_name, uint db_size)
 {
-	char *name = new char[db_name.size()+1];
-
 	if(this->db_ptr != nullptr)
 	{
 		std::cout << "ERROR: you can't connect twice to a database" << std::endl;
 		exit(-1);
 	}
-	strcpy(name, db_name.c_str());
-	db_ptr = wg_attach_database(name, db_size);
+	db_ptr = wg_attach_database(const_cast<char*>(db_name.c_str()), db_size);
 	if (!db_ptr)
 	{
 		std::cout << "Failed to attach database" << std::endl;
 		exit(-1);
 	}
-
-	delete name;
 }
 
 
 void		graphDB::connect_db(sstr const& db_name)
 {
-	char *name = new char[db_name.size()+1];
-
 	if(this->db_ptr != nullptr)
 	{
 		std::cout << "ERROR: you can't connect twice to a database" << std::endl;
 		exit(-1);
 	}
-	strcpy(name, db_name.c_str());
-
-	if (!(this->db_ptr = wg_attach_existing_database(name)))
+	this->db_ptr = wg_attach_existing_database(const_cast<char *>(db_name.c_str()));
+	if (this->db_ptr == NULL)
 	{
 		std::cout << "Database named \"" << db_name << "failled to attach !" << std::endl;
 		exit(-1);
 	}
-
-	delete name;
 }
 
 void		graphDB::add_node_type(sstr const& name, uint size, std::vector<sstr> const& fields_name)
@@ -284,12 +274,9 @@ node		*graphDB::_create_node(sstr const& type_name)
 node	*graphDB::search_node(sstr const& type_name, sstr const& field_name, sstr const& searched)
 {
 	void	*rec;
-	char *searched_cstr = new char[searched.size()+1];
 
-	strcpy(searched_cstr, searched.c_str());
 	wg_int fieldnr = (get_type_fields_map[get_type_id[type_name]])[field_name];
-	rec = wg_find_record_str(db_ptr, fieldnr, WG_COND_EQUAL, searched_cstr, nullptr);
-	delete searched_cstr;
+	rec = wg_find_record_str(db_ptr, fieldnr, WG_COND_EQUAL, const_cast<char *>(searched.c_str()), NULL);
 	if (rec == nullptr)
 		return (nullptr);
 	else
