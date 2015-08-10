@@ -11,7 +11,7 @@ graphDB::graphDB( void )
 	return ;
 }
 
-graphDB::graphDB( sstr db_name, uint db_size )
+graphDB::graphDB( sstr const& db_name, uint db_size )
 {
 	this->db_ptr = nullptr;
 	this->create_db(db_name, db_size);
@@ -70,7 +70,7 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	return ;
 }
 
-graphDB::graphDB( sstr db_name )
+graphDB::graphDB( sstr const& db_name )
 {
 	this->db_ptr = nullptr;
 	this->connect_db(db_name );
@@ -94,7 +94,7 @@ graphDB::~graphDB( void )
 	return ;
 }
 
-void		graphDB::create_db(sstr db_name, uint db_size)
+void		graphDB::create_db(sstr const& db_name, uint db_size)
 {
 	char *name = new char[db_name.size()+1];
 
@@ -115,7 +115,7 @@ void		graphDB::create_db(sstr db_name, uint db_size)
 }
 
 
-void		graphDB::connect_db(sstr db_name)
+void		graphDB::connect_db(sstr const& db_name)
 {
 	char *name = new char[db_name.size()+1];
 
@@ -135,7 +135,7 @@ void		graphDB::connect_db(sstr db_name)
 	delete name;
 }
 
-void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
+void		graphDB::add_node_type(sstr const& name, uint size, std::vector<sstr> const& fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
 	sstr	concated;
@@ -174,7 +174,7 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	this->number_of_types += 1; 
 }
 
-void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
+void		graphDB::_add_node_type(sstr const& name, uint size, std::vector<sstr> const& fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
 	/*	sstr	concated;
@@ -217,7 +217,7 @@ void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_nam
 }
 
 
-node		*graphDB::create_node(sstr type_name)
+node		*graphDB::create_node(sstr const& type_name)
 {
 	node	*nnode = nullptr;
 	wg_int	encoded_data;
@@ -251,7 +251,7 @@ node		*graphDB::create_node(sstr type_name)
 	return ( nnode );
 }
 
-node		*graphDB::_create_node(sstr type_name)
+node		*graphDB::_create_node(sstr const& type_name)
 {
 	node	*nnode = nullptr;
 	wg_int	encoded_data;
@@ -281,7 +281,7 @@ node		*graphDB::_create_node(sstr type_name)
 	/* don't forget to add type field !!!!! */
 	return ( nnode );
 }
-node	*graphDB::search_node(sstr type_name, sstr field_name, sstr searched)
+node	*graphDB::search_node(sstr const& type_name, sstr const& field_name, sstr const& searched)
 {
 	void	*rec;
 	char *searched_cstr = new char[searched.size()+1];
@@ -296,7 +296,7 @@ node	*graphDB::search_node(sstr type_name, sstr field_name, sstr searched)
 		return (new node(rec, this));
 }
 
-node	*graphDB::search_node(sstr type_name)
+node	*graphDB::search_node(sstr const& type_name)
 {
 	void	*rec;
 
