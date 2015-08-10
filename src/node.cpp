@@ -19,7 +19,7 @@ node::~node( void )
 }
 
 /* getters */
-void    node::get_field(sstr field_name, node **ret) const
+void    node::get_field(sstr const& field_name, node **ret) const
 {
 	uint			index;
 	void			*rec;
@@ -42,7 +42,7 @@ void    node::get_field(sstr field_name, node **ret) const
 	*ret = fresh_node;
 }
 
-void    node::get_field(sstr field_name, sstr *ret) const
+void    node::get_field(sstr const& field_name, sstr *ret) const
 {
 	uint			index;
 
@@ -59,7 +59,7 @@ void    node::get_field(sstr field_name, sstr *ret) const
 	*ret = wg_decode_str(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 }
 
-void    node::get_field(sstr field_name, int *ret) const
+void    node::get_field(sstr const& field_name, int *ret) const
 {
 	uint			index;
 
@@ -75,7 +75,7 @@ void    node::get_field(sstr field_name, int *ret) const
 	*ret = wg_decode_int(agdb->db_ptr, wg_get_field(agdb->db_ptr, record_ptr, index));
 }
 
-void    node::get_field(sstr field_name, double *ret) const
+void    node::get_field(sstr const& field_name, double *ret) const
 {
 	uint			index;
 
@@ -93,7 +93,7 @@ void    node::get_field(sstr field_name, double *ret) const
 /* end of getters */
 
 /* setters */
-void    node::set_field(sstr field_name, node *data)
+void    node::set_field(sstr const& field_name, node *data)
 {
 	uint			index;
 	wg_int			encoded_data;
@@ -119,7 +119,7 @@ void    node::set_field(sstr field_name, node *data)
 	}
 }
 
-void    node::set_field(sstr field_name, sstr data)
+void    node::set_field(sstr const& field_name, sstr const& data)
 {
 	uint			index;
 	wg_int			encoded_data;
@@ -150,7 +150,7 @@ void    node::set_field(sstr field_name, sstr data)
 	delete str;
 }
 
-void    node::set_field(sstr field_name, int data)
+void    node::set_field(sstr const& field_name, int data)
 {
 	uint			index;
 	wg_int			encoded_data;
@@ -176,7 +176,7 @@ void    node::set_field(sstr field_name, int data)
 	}
 }
 
-void    node::set_field(sstr field_name, double data)
+void    node::set_field(sstr const& field_name, double data)
 {
 	uint			index;
 	wg_int			encoded_data;
@@ -205,7 +205,7 @@ void    node::set_field(sstr field_name, double data)
 
 /* list managment */
 
-void	node::list_begining(sstr field_name)
+void	node::list_begining(sstr const& field_name)
 {
 	try
 	{
@@ -221,7 +221,7 @@ void	node::list_begining(sstr field_name)
 	list_current_elem[field_name] = list_first_elem[field_name];
 }
 
-int	node::list_next(sstr field_name)
+int	node::list_next(sstr const& field_name)
 {
 	void	*rec;
 	try
@@ -244,7 +244,7 @@ int	node::list_next(sstr field_name)
 		return (0);
 }
 
-void	node::get_list_elem(sstr field_name, node **ret)
+void	node::get_list_elem(sstr const& field_name, node **ret)
 {
 	void	*rec;
 	//std::vector<sstr>	fields_list;
@@ -257,7 +257,7 @@ void	node::get_list_elem(sstr field_name, node **ret)
 		(*ret)->get_field_index[fields_list[i]] = i;
 	}*/
 }
-void	node::add_list_elem(sstr field_name, node *data)
+void	node::add_list_elem(sstr const& field_name, node *data)
 {
 	void	*rec;
 	void	*prev;
