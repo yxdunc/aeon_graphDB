@@ -1,9 +1,9 @@
 #!/bin/bash
 
-red='\e[31m'
-yellow='\e[33m'
-green='\e[32m'
-NC='' # No Color
+red='\033[31m'
+yellow='\033[33m'
+green='\033[32m'
+NC='\033[0m' # No Color
 echo -e "${yellow}WARNING: data-base have been freed !\n\
 - Data-base backup available (memorie_dump/rescue.bin)${NC}"
 wgdb export -f memorie_dump/rescue.bin
