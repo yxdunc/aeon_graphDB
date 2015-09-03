@@ -11,9 +11,9 @@ graphDB::graphDB( void )
 	return ;
 }
 
-graphDB::graphDB( sstr db_name, uint db_size )
+graphDB::graphDB( sstr const& db_name, uint db_size )
 {
-	this->db_ptr = NULL;
+	this->db_ptr = nullptr;
 	this->create_db(db_name, db_size);
 	this->number_of_types = 1000; // that let the first 1000 type id for internal purposes
 	this->_add_node_type("_list_elem", 2, {"next", "value"}); // define AEON_LIST_NEXT 1/AEON_LIST_VALUE 2
@@ -22,7 +22,7 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	/* */
 	this->_add_node_type("_type", 3, {"concat_fields_names", "name", "id"});
 	this->type_data = search_node("_type_list");
-	if (this->type_data == NULL)
+	if (this->type_data == nullptr)
 	{
 		this->type_data = this->_create_node("_type_list"); //creat the type data container
 	}
@@ -41,7 +41,7 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	do
 	{
 		this->type_data->get_list_elem("list", &getted_node);
-		if (getted_node == NULL)
+		if (getted_node == nullptr)
 			break ;
 		getted_node->get_field("concat_fields_names", &str);
 		getted_node->get_field("name", &name);
@@ -53,11 +53,11 @@ graphDB::graphDB( sstr db_name, uint db_size )
 		strcpy(cstr, str.c_str());
 		pch = strtok(cstr," ");
 		i = 0;
-		while (pch != NULL)
+		while (pch != nullptr)
 		{
 			std::cout << pch << std::endl;
 			get_type_fields_map[get_type_id[name]][pch] = i + 1;
-			pch = strtok(NULL, " ");
+			pch = strtok(nullptr, " ");
 			i++;
 		}
 		get_type_size[name] = i;
@@ -70,9 +70,9 @@ graphDB::graphDB( sstr db_name, uint db_size )
 	return ;
 }
 
-graphDB::graphDB( sstr db_name )
+graphDB::graphDB( sstr const& db_name )
 {
-	this->db_ptr = NULL;
+	this->db_ptr = nullptr;
 	this->connect_db(db_name );
 	this->number_of_types = 1000; // that let the first 1000 type id for internal purposes
 	this->_add_node_type("_list_elem", 2, {"next", "value"}); 
@@ -94,48 +94,38 @@ graphDB::~graphDB( void )
 	return ;
 }
 
-void		graphDB::create_db(sstr db_name, uint db_size)
+void		graphDB::create_db(sstr const& db_name, uint db_size)
 {
-	char *name = new char[db_name.size()+1];
-
-	if(this->db_ptr != NULL)
+	if(this->db_ptr != nullptr)
 	{
 		std::cout << "ERROR: you can't connect twice to a database" << std::endl;
 		exit(-1);
 	}
-	strcpy(name, db_name.c_str());
-	db_ptr = wg_attach_database(name, db_size);
+	db_ptr = wg_attach_database(const_cast<char*>(db_name.c_str()), db_size);
 	if (!db_ptr)
 	{
 		std::cout << "Failed to attach database" << std::endl;
 		exit(-1);
 	}
-
-	delete name;
 }
 
 
-void		graphDB::connect_db(sstr db_name)
+void		graphDB::connect_db(sstr const& db_name)
 {
-	char *name = new char[db_name.size()+1];
-
-	if(this->db_ptr != NULL)
+	if(this->db_ptr != nullptr)
 	{
 		std::cout << "ERROR: you can't connect twice to a database" << std::endl;
 		exit(-1);
 	}
-	strcpy(name, db_name.c_str());
-
-	if (!(this->db_ptr = wg_attach_existing_database(name)))
+	this->db_ptr = wg_attach_existing_database(const_cast<char *>(db_name.c_str()));
+	if (this->db_ptr == NULL)
 	{
 		std::cout << "Database named \"" << db_name << "failled to attach !" << std::endl;
 		exit(-1);
 	}
-
-	delete name;
 }
 
-void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
+void		graphDB::add_node_type(sstr const& name, uint size, std::vector<sstr> const& fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
 	sstr	concated;
@@ -174,7 +164,7 @@ void		graphDB::add_node_type(sstr name, uint size, std::vector<sstr> fields_name
 	this->number_of_types += 1; 
 }
 
-void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_name)
+void		graphDB::_add_node_type(sstr const& name, uint size, std::vector<sstr> const& fields_name)
 {
 	std::map<sstr, uint>	map_fields_name;
 	/*	sstr	concated;
@@ -217,9 +207,9 @@ void		graphDB::_add_node_type(sstr name, uint size, std::vector<sstr> fields_nam
 }
 
 
-node		*graphDB::create_node(sstr type_name)
+node		*graphDB::create_node(sstr const& type_name)
 {
-	node	*nnode = NULL;
+	node	*nnode = nullptr;
 	wg_int	encoded_data;
 	void	*rec;
 
@@ -229,7 +219,7 @@ node		*graphDB::create_node(sstr type_name)
 		exit(0);
 	}
 	rec = wg_create_record(this->db_ptr, get_type_size[type_name] + 1); // remember +1 for type field
-	if(rec == NULL)
+	if(rec == nullptr)
 	{
 		std::cout << "ERROR: couln't add a new record to the database." << std::endl;
 		exit(-1);
@@ -251,14 +241,14 @@ node		*graphDB::create_node(sstr type_name)
 	return ( nnode );
 }
 
-node		*graphDB::_create_node(sstr type_name)
+node		*graphDB::_create_node(sstr const& type_name)
 {
-	node	*nnode = NULL;
+	node	*nnode = nullptr;
 	wg_int	encoded_data;
 	void	*rec;
 
 	rec = wg_create_record(this->db_ptr, get_type_size[type_name] + 1); // remember +1 for type field
-	if(rec == NULL)
+	if(rec == nullptr)
 	{
 		std::cout << "ERROR: couln't add a new record to the database." << std::endl;
 		exit(-1);
@@ -281,28 +271,25 @@ node		*graphDB::_create_node(sstr type_name)
 	/* don't forget to add type field !!!!! */
 	return ( nnode );
 }
-node	*graphDB::search_node(sstr type_name, sstr field_name, sstr searched)
+node	*graphDB::search_node(sstr const& type_name, sstr const& field_name, sstr const& searched)
 {
 	void	*rec;
-	char *searched_cstr = new char[searched.size()+1];
 
-	strcpy(searched_cstr, searched.c_str());
 	wg_int fieldnr = (get_type_fields_map[get_type_id[type_name]])[field_name];
-	rec = wg_find_record_str(db_ptr, fieldnr, WG_COND_EQUAL, searched_cstr, NULL);
-	delete searched_cstr;
-	if (rec == NULL)
-		return (NULL);
+	rec = wg_find_record_str(db_ptr, fieldnr, WG_COND_EQUAL, const_cast<char *>(searched.c_str()), NULL);
+	if (rec == nullptr)
+		return (nullptr);
 	else
 		return (new node(rec, this));
 }
 
-node	*graphDB::search_node(sstr type_name)
+node	*graphDB::search_node(sstr const& type_name)
 {
 	void	*rec;
 
-	rec = wg_find_record_int(db_ptr, 0, WG_COND_EQUAL, get_type_id[type_name], NULL);
-	if (rec == NULL)
-		return (NULL);
+	rec = wg_find_record_int(db_ptr, 0, WG_COND_EQUAL, get_type_id[type_name], nullptr);
+	if (rec == nullptr)
+		return (nullptr);
 	else
 		return (new node(rec, this));
 }

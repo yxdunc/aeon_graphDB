@@ -6,9 +6,9 @@ int		main(void)
 	sstr	str;
 	int	num;
 	double	dbl;
-	aeon::node *node = NULL;
-	aeon::node *next_node = NULL;
-	aeon::node *getted_node = NULL;
+	aeon::node *node = nullptr;
+	aeon::node *next_node = nullptr;
+	aeon::node *getted_node = nullptr;
 
 	aeon::graphDB	*db = new aeon::graphDB("aeonDB", 100000);
 

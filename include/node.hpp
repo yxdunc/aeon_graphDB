@@ -17,25 +17,25 @@ class node
 		~node( void );
 
 		/* getters/setters */
-		void	get_field(sstr field_name, node **ret) const; // dynamically allocate the reutned node
+		void	get_field(sstr const& field_name, node **ret) const; // dynamically allocate the reutned node
 		/* [to do]add an overload for node *ret when you already have a alocated node #opti */
-		void	get_field(sstr field_name, sstr *ret) const;
-		void	get_field(sstr field_name, int	*ret) const;
-		void	get_field(sstr field_name, double *ret) const;
+		void	get_field(sstr const& field_name, sstr *ret) const;
+		void	get_field(sstr const& field_name, int	*ret) const;
+		void	get_field(sstr const& field_name, double *ret) const;
 
-		void	set_field(sstr field_name, node *data);
-		void	set_field(sstr field_name, sstr data);
-		void	set_field(sstr field_name, int data);
-		void	set_field(sstr field_name, double data);
+		void	set_field(sstr const& field_name, node *data);
+		void	set_field(sstr const& field_name, sstr const& data);
+		void	set_field(sstr const& field_name, int data);
+		void	set_field(sstr const& field_name, double data);
 
 		/* list getting/setting */
-		void	get_list_elem(sstr field_name, node **ret); // ret allocated
+		void	get_list_elem(sstr const& field_name, node **ret); // ret allocated
 		/* [to do]add an overload for node *ret when you already have a alocated node #opti */
-		void	add_list_elem(sstr field_name, node *data);
+		void	add_list_elem(sstr const& field_name, node *data);
 
 		/* list offset controle */
-		int	list_next(sstr field_name);
-		void	list_begining(sstr field_name);
+		int	list_next(sstr const& field_name);
+		void	list_begining(sstr const& field_name);
 
 		graphDB	*agdb;
 
