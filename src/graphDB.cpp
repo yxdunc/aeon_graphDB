@@ -293,3 +293,8 @@ node	*graphDB::search_node(sstr const& type_name)
 	else
 		return (new node(rec, this));
 }
+
+void	*graphDB::get_db_ptr() const
+{
+	return (this->db_ptr);
+}

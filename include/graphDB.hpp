@@ -44,6 +44,8 @@ class graphDB
 	//	std::map <uint, std::vector<sstr> >	get_type_fields; // do not use anymore
 		std::map <uint, std::map<sstr, uint> >	get_type_fields_map;
 
+		/* generic getter */
+		void	*get_db_ptr() const;
 
 	private:
 		graphDB( void );
