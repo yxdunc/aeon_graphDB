@@ -27,4 +27,4 @@ make
 ```
 
 
-Development stopped since whiteDB wich is not maintained anylonger :[![Build Status](https://travis-ci.org/yxdunc/aeon_graphDB.svg)](https://travis-ci.org/yxdunc/aeon_graphDB)
+Development stopped since whiteDB is not maintained anylonger :[![Build Status](https://travis-ci.org/yxdunc/aeon_graphDB.svg)](https://travis-ci.org/yxdunc/aeon_graphDB)
