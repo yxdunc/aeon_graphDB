@@ -27,4 +27,4 @@ make
 ```
 
 
-This is normal since travis config file is not complete and actually do not accept c++11... :[![Build Status](https://travis-ci.org/yxdunc/aeon_graphDB.svg)](https://travis-ci.org/yxdunc/aeon_graphDB)
+Development stopped since whiteDB wich is not maintained anylonger :[![Build Status](https://travis-ci.org/yxdunc/aeon_graphDB.svg)](https://travis-ci.org/yxdunc/aeon_graphDB)
